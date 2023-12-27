@@ -1,4 +1,4 @@
-package main;
+package spring;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -7,17 +7,14 @@ import java.io.InputStreamReader;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
-import assembler.Assembler;
 import config.AppCtx;
-import spring.*;
 
-public class MainForAssembler {
+public class MainForSpring {
 	
 	private static ApplicationContext ctx = null;
 
 	public static void main(String[] args) throws IOException {
 		// TODO Auto-generated method stub
-		
 		ctx = new AnnotationConfigApplicationContext(AppCtx.class);
 		
 		BufferedReader reader = 
@@ -29,20 +26,30 @@ public class MainForAssembler {
 				System.out.println("종료합니다.");
 				break;
 			}
-			if(command.startsWith("new ")) {
+			if(command.startsWith("new")) {
 				processNewCommand(command.split(" "));
 				continue;
-			} else if (command.startsWith("change ")) {
+				
+			} else if (command.startsWith("change")) {
 				processChangeCommand(command.split(" "));
 				continue;
+			} else if (command.equals("list")) {
+				processListCommand();
+				continue;
 			}
+			
 			printHelp();
 		}
 
 	}
 	
-	// private static Assembler assembler = new Assembler();
-	
+	private static void processListCommand() {
+		// TODO Auto-generated method stub
+		MemberListPrinter listPrinter = 
+				ctx.getBean("listPrinter", MemberListPrinter.class);
+		listPrinter.printAll();
+	}
+
 	private static void processNewCommand(String[] arg) {
 		if(arg.length != 5) {
 			printHelp();
